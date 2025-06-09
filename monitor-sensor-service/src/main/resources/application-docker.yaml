@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://sensor-db:5432/agsr?currentSchema=agsr

@@ -1,0 +1,3 @@
+FROM postgres:latest
+
+RUN echo "CREATE SCHEMA IF NOT EXISTS agsr;" > /docker-entrypoint-initdb.d/init-schema.sql

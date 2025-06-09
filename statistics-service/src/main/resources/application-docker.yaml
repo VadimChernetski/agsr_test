@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://statistics-db:5432/agsr?currentSchema=agsr
+sensor:
+  service:
+    url: "http://monitor-sensor-service:8080/statistics"
+

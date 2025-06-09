@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  sensor-db:
+    build:
+      context: .
+      dockerfile: Dockerfile_sensor_db
+    environment:
+      POSTGRES_USER: agsr
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: agsr
+    ports:
+      - "5432:5432"
+    volumes:
+      - sensor_data:/var/lib/postgresql/data
+    networks:
+      - agsr_network
+
+  statistics-db:
+    build:
+      context: .
+      dockerfile: Dockerfile_statistics_db
+    environment:
+      POSTGRES_USER: agsr
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: agsr
+    ports:
+      - "5433:5432"
+    volumes:
+      - stats_data:/var/lib/postgresql/data
+    networks:
+      - agsr_network
+
+  monitor-sensor-service:
+    build:
+      context: .
+      dockerfile: Dockerfile_monitor_service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - sensor-db
+    networks:
+      - agsr_network
+
+  statistics-service:
+    build:
+      context: .
+      dockerfile: Dockerfile_statistics_service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - statistics-db
+    networks:
+      - agsr_network
+
+networks:
+  agsr_network:
+    driver: bridge
+
+volumes:
+  sensor_data:
+  stats_data:
